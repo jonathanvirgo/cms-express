@@ -1,0 +1,44 @@
+{
+    "name": "express-cms",
+    "version": "1.0.0",
+    "description": "Express CMS with Dynamic Forms - TypeScript + Prisma v7 + EJS",
+    "type": "module",
+    "main": "dist/app.js",
+    "scripts": {
+        "dev": "tsx watch src/app.ts",
+        "build": "tsc",
+        "start": "node dist/app.js",
+        "db:push": "prisma db push",
+        "db:seed": "prisma db seed",
+        "db:studio": "prisma studio",
+        "generate:crud": "tsx scripts/generate-crud.ts"
+    },
+    "prisma": {
+        "seed": "tsx prisma/seed.ts"
+    },
+    "engines": {
+        "node": ">=24.0.0"
+    },
+    "dependencies": {
+        "@prisma/adapter-pg": "^7.2.0",
+        "@prisma/client": "^7.2.0",
+        "bcrypt": "^5.1.1",
+        "cookie-parser": "^1.4.7",
+        "ejs": "^3.1.10",
+        "express": "^5.0.1",
+        "jsonwebtoken": "^9.0.2",
+        "pg": "^8.17.1"
+    },
+    "devDependencies": {
+        "@types/bcrypt": "^5.0.2",
+        "@types/cookie-parser": "^1.4.8",
+        "@types/express": "^5.0.2",
+        "@types/jsonwebtoken": "^9.0.10",
+        "@types/node": "^22.15.32",
+        "@types/pg": "^8.16.0",
+        "dotenv": "^17.2.3",
+        "prisma": "^7.2.0",
+        "tsx": "^4.21.0",
+        "typescript": "^5.8.3"
+    }
+}

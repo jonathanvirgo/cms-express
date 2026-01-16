@@ -1,0 +1,112 @@
+<%# Dynamic Form Partial - Renders form based on config %>
+    <form action="<%= action %>" method="POST" class="dynamic-form" enctype="multipart/form-data">
+        <% if (typeof error !=='undefined' && error) { %>
+            <div class="alert alert-error">
+                <%= error %>
+            </div>
+            <% } %>
+
+                <% config.fields.forEach(function(field) { %>
+                    <% if (!field.hidden) { %>
+                        <div class="form-group">
+                            <label for="<%= field.name %>" class="form-label">
+                                <%= field.label %>
+                                    <% if (field.required) { %><span class="required">*</span>
+                                        <% } %>
+                            </label>
+
+                            <% if (field.type==='text' || field.type==='email' || field.type==='password' ) { %>
+                                <input type="<%= field.type %>" id="<%= field.name %>" name="<%= field.name %>"
+                                    value="<%= values[field.name] || '' %>" placeholder="<%= field.placeholder || '' %>"
+                                    class="form-input" <%=field.required && !isEdit ? 'required' : '' %>
+                                <%= field.disabled ? 'disabled' : '' %>
+                                    >
+
+                                    <% } else if (field.type==='number' ) { %>
+                                        <input type="number" id="<%= field.name %>" name="<%= field.name %>"
+                                            value="<%= values[field.name] || field.defaultValue || '' %>"
+                                            min="<%= field.min %>" max="<%= field.max %>" step="<%= field.step || 1 %>"
+                                            class="form-input" <%=field.required ? 'required' : '' %>
+                                        >
+
+                                        <% } else if (field.type==='textarea' || field.type==='rich-text' ) { %>
+                                            <textarea id="<%= field.name %>" name="<%= field.name %>"
+                                                rows="<%= field.rows || 5 %>"
+                                                placeholder="<%= field.placeholder || '' %>"
+                                                class="form-textarea <%= field.type === 'rich-text' ? 'rich-text' : '' %>"
+                                                style="<%= field.minHeight ? 'min-height:' + field.minHeight + 'px' : '' %>"
+                                                <%=field.required ? 'required' : '' %>
+                ><%= values[field.name] || field.defaultValue || '' %></textarea>
+
+                                            <% } else if (field.type==='checkbox' ) { %>
+                                                <label class="checkbox-label">
+                                                    <input type="checkbox" id="<%= field.name %>"
+                                                        name="<%= field.name %>" class="form-checkbox"
+                                                        <%=values[field.name] || field.defaultValue ? 'checked' : '' %>
+                                                    >
+                                                    <span class="checkbox-text">Enable</span>
+                                                </label>
+
+                                                <% } else if (field.type==='select' ) { %>
+                                                    <select id="<%= field.name %>" name="<%= field.name %>"
+                                                        class="form-select" <%=field.required ? 'required' : '' %>
+                                                        >
+                                                        <option value="">-- Select --</option>
+                                                        <% field.options && field.options.forEach(function(opt) { %>
+                                                            <option value="<%= opt.value %>"
+                                                                <%=values[field.name]===opt.value ? 'selected' : '' %>
+                                                                ><%= opt.label %>
+                                                            </option>
+                                                            <% }) %>
+                                                    </select>
+
+                                                    <% } else if (field.type==='relation' ) { %>
+                                                        <select id="<%= field.name %>" name="<%= field.name %>"
+                                                            class="form-select" <%=field.required ? 'required' : '' %>
+                                                            >
+                                                            <option value="">-- Select <%= field.relation.model %> --
+                                                            </option>
+                                                            <% var items=formData[field.relation.model] || [];
+                                                                items.forEach(function(item) { %>
+                                                                <option value="<%= item[field.relation.valueField] %>"
+                                                                    <%=values[field.name]===item[field.relation.valueField]
+                                                                    ? 'selected' : '' %>
+                                                                    ><%= item[field.relation.displayField] %>
+                                                                </option>
+                                                                <% }) %>
+                                                        </select>
+
+                                                        <% } else if (field.type==='date' ) { %>
+                                                            <input type="date" id="<%= field.name %>"
+                                                                name="<%= field.name %>"
+                                                                value="<%= values[field.name] ? new Date(values[field.name]).toISOString().split('T')[0] : '' %>"
+                                                                class="form-input" <%=field.required ? 'required' : ''
+                                                                %>
+                                                            >
+
+                                                            <% } else if (field.type==='file' ) { %>
+                                                                <input type="file" id="<%= field.name %>"
+                                                                    name="<%= field.name %>"
+                                                                    accept="<%= field.accept || '*/*' %>"
+                                                                    class="form-file" <%=field.multiple ? 'multiple'
+                                                                    : '' %>
+                                                                >
+                                                                <% } %>
+
+                                                                    <% if (field.description) { %>
+                                                                        <span class="form-hint">
+                                                                            <%= field.description %>
+                                                                        </span>
+                                                                        <% } %>
+                        </div>
+                        <% } %>
+                            <% }) %>
+
+                                <div class="form-actions">
+                                    <button type="submit" class="btn btn-primary">
+                                        <%= isEdit ? 'Update' : 'Create' %>
+                                            <%= config.title %>
+                                    </button>
+                                    <a href="/<%= config.modelName.toLowerCase() %>s" class="btn btn-outline">Cancel</a>
+                                </div>
+    </form>

@@ -1,0 +1,64 @@
+<%- include('../layouts/main', { body: ` <div class="dashboard">
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-icon">📝</div>
+            <div class="stat-content">
+                <span class="stat-value">${stats.postCount}</span>
+                <span class="stat-label">Posts</span>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">📁</div>
+            <div class="stat-content">
+                <span class="stat-value">${stats.categoryCount}</span>
+                <span class="stat-label">Categories</span>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">🏷️</div>
+            <div class="stat-content">
+                <span class="stat-value">${stats.tagCount}</span>
+                <span class="stat-label">Tags</span>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">👥</div>
+            <div class="stat-content">
+                <span class="stat-value">${stats.userCount}</span>
+                <span class="stat-label">Users</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            <h2>Recent Posts</h2>
+            <a href="/posts/create" class="btn btn-primary btn-sm">New Post</a>
+        </div>
+        <div class="card-body">
+            ${recentPosts.length > 0 ? `
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Author</th>
+                        <th>Category</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${recentPosts.map(post => `
+                    <tr>
+                        <td><a href="/posts/${post.id}/edit">${post.title}</a></td>
+                        <td>${post.author?.name || '-'}</td>
+                        <td>${post.category?.name || '-'}</td>
+                        <td><span class="badge badge-${post.status}">${post.status}</span></td>
+                    </tr>
+                    `).join('')}
+                </tbody>
+            </table>
+            ` : '<p class="text-muted">No posts yet.</p>'}
+        </div>
+    </div>
+    </div>
+    ` }) %>

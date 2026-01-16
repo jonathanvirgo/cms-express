@@ -1,0 +1,28 @@
+<%- include('../layouts/main', { body: ` <div class="page-header">
+    <h2>Tags</h2>
+    <a href="/tags/create" class="btn btn-primary">Add Tag</a>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            ${tags.length > 0 ? `
+            <div class="tags-grid">
+                ${tags.map(t => `
+                <div class="tag-card">
+                    <div class="tag-name">${t.name}</div>
+                    <div class="tag-slug"><code>${t.slug}</code></div>
+                    <div class="tag-count">${t._count.posts} posts</div>
+                    <div class="tag-actions">
+                        <a href="/tags/${t.id}/edit" class="btn btn-sm btn-outline">Edit</a>
+                        <form action="/tags/${t.id}/delete" method="POST" class="inline"
+                            onsubmit="return confirm('Delete?')">
+                            <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                        </form>
+                    </div>
+                </div>
+                `).join('')}
+            </div>
+            ` : '<p class="text-muted">No tags found.</p>'}
+        </div>
+    </div>
+    ` }) %>

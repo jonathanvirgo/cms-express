@@ -1,0 +1,71 @@
+<aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+        <div class="logo">
+            <span class="logo-icon">⚡</span>
+            <span class="logo-text">CMS</span>
+        </div>
+        <button class="toggle-btn" id="toggle-sidebar">
+            <span>☰</span>
+        </button>
+    </div>
+
+    <nav class="sidebar-nav">
+        <div class="nav-section">
+            <span class="nav-section-title">Main</span>
+            <a href="/" class="nav-item <%= currentPath === '/' ? 'active' : '' %>">
+                <span class="nav-icon">📊</span>
+                <span class="nav-text">Dashboard</span>
+            </a>
+        </div>
+
+        <div class="nav-section">
+            <span class="nav-section-title">Content</span>
+            <a href="/posts" class="nav-item <%= currentPath.startsWith('/posts') ? 'active' : '' %>">
+                <span class="nav-icon">📝</span>
+                <span class="nav-text">Posts</span>
+            </a>
+            <a href="/categories" class="nav-item <%= currentPath.startsWith('/categories') ? 'active' : '' %>">
+                <span class="nav-icon">📁</span>
+                <span class="nav-text">Categories</span>
+            </a>
+            <a href="/tags" class="nav-item <%= currentPath.startsWith('/tags') ? 'active' : '' %>">
+                <span class="nav-icon">🏷️</span>
+                <span class="nav-text">Tags</span>
+            </a>
+        
+            <a href="/products" class="nav-item <%= currentPath.startsWith('/products') ? 'active' : '' %>">
+                <span class="nav-icon">📦</span>
+                <span class="nav-text">Products</span>
+            </a></div>
+
+        <div class="nav-section">
+            <span class="nav-section-title">Management</span>
+            <a href="/users" class="nav-item <%= currentPath.startsWith('/users') ? 'active' : '' %>">
+                <span class="nav-icon">👥</span>
+                <span class="nav-text">Users</span>
+            </a>
+            <a href="/roles" class="nav-item <%= currentPath.startsWith('/roles') ? 'active' : '' %>">
+                <span class="nav-icon">🛡️</span>
+                <span class="nav-text">Roles</span>
+            </a>
+        </div>
+    </nav>
+
+    <% if (user) { %>
+        <div class="sidebar-footer">
+            <div class="user-card">
+                <div class="user-avatar">
+                    <%= user.name.charAt(0).toUpperCase() %>
+                </div>
+                <div class="user-info">
+                    <span class="user-name">
+                        <%= user.name %>
+                    </span>
+                    <span class="user-role">
+                        <%= user.role.name %>
+                    </span>
+                </div>
+            </div>
+        </div>
+        <% } %>
+</aside>

@@ -1,0 +1,38 @@
+<%- include('../layouts/main', { body: ` <div class="page-header">
+    <h2>Roles</h2>
+    <a href="/roles/create" class="btn btn-primary">Add Role</a>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            ${roles.length > 0 ? `
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Description</th>
+                        <th>Users</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${roles.map(r => `
+                    <tr>
+                        <td><strong>${r.name}</strong></td>
+                        <td>${r.description || '-'}</td>
+                        <td>${r._count.users}</td>
+                        <td class="actions">
+                            <a href="/roles/${r.id}/edit" class="btn btn-sm btn-outline">Edit</a>
+                            <form action="/roles/${r.id}/delete" method="POST" class="inline"
+                                onsubmit="return confirm('Delete this role?')">
+                                <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                    `).join('')}
+                </tbody>
+            </table>
+            ` : '<p class="text-muted">No roles found.</p>'}
+        </div>
+    </div>
+    ` }) %>

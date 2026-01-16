@@ -1,0 +1,10 @@
+<%- include('../layouts/main', { body: ` <div class="page-header">
+    <h2>${isEdit ? 'Edit' : 'Create'} Role</h2>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            ${include('../partials/dynamic-form')}
+        </div>
+    </div>
+    ` }) %>

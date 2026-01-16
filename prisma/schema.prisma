@@ -1,0 +1,159 @@
+// This is your Prisma schema file for Express CMS
+// Learn more: https://pris.ly/d/prisma-schema
+
+generator client {
+    provider        = "prisma-client-js"
+    previewFeatures = ["driverAdapters"]
+}
+
+datasource db {
+    provider = "postgresql"
+}
+
+// =============================================================================
+// USER & ROLE MANAGEMENT
+// =============================================================================
+
+model User {
+    id              String               @id @default(cuid())
+    email           String               @unique
+    name            String
+    password        String
+    isActive        Boolean              @default(true)
+    roleId          String
+    role            Role                 @relation(fields: [roleId], references: [id])
+    posts           Post[]
+    sessions        UserSession[]
+    sessionSettings UserSessionSettings?
+    createdAt       DateTime             @default(now())
+    updatedAt       DateTime             @updatedAt
+
+    @@index([roleId])
+    @@index([email])
+}
+
+model Role {
+    id          String   @id @default(cuid())
+    name        String   @unique
+    description String?
+    permissions String   @default("[]")
+    users       User[]
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
+}
+
+// =============================================================================
+// SESSION MANAGEMENT
+// =============================================================================
+
+model UserSession {
+    id               String    @id @default(cuid())
+    userId           String
+    jwtTokenId       String
+    deviceName       String?
+    deviceType       String    @default("unknown")
+    browser          String?
+    os               String?
+    deviceInfo       String?
+    ipAddress        String?
+    userAgent        String?
+    location         String?
+    loginAt          DateTime  @default(now())
+    lastActivity     DateTime  @default(now()) @updatedAt
+    logoutAt         DateTime?
+    isActive         Boolean   @default(true)
+    isCurrentSession Boolean   @default(false)
+    user             User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+    @@index([userId, jwtTokenId])
+    @@index([lastActivity])
+}
+
+model UserSessionSettings {
+    id                   String   @id @default(cuid())
+    userId               String   @unique
+    maxSessions          Int      @default(5)
+    sessionTimeoutHours  Int      @default(24)
+    allowMultipleDevices Boolean  @default(true)
+    notifyNewLogin       Boolean  @default(true)
+    autoLogoutInactive   Boolean  @default(true)
+    user                 User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+    createdAt            DateTime @default(now())
+    updatedAt            DateTime @updatedAt
+}
+
+// =============================================================================
+// CONTENT MANAGEMENT
+// =============================================================================
+
+model Category {
+    id          String    @id @default(cuid())
+    name        String
+    slug        String    @unique
+    description String?
+    posts       Post[]
+    products    Product[]
+    createdAt   DateTime  @default(now())
+    updatedAt   DateTime  @updatedAt
+}
+
+model Tag {
+    id        String    @id @default(cuid())
+    name      String
+    slug      String    @unique
+    posts     PostTag[]
+    createdAt DateTime  @default(now())
+    updatedAt DateTime  @updatedAt
+}
+
+model Post {
+    id          String    @id @default(cuid())
+    title       String
+    slug        String    @unique
+    excerpt     String?
+    content     String?
+    featuredImage String?
+    status      String    @default("draft")
+    authorId    String
+    author      User      @relation(fields: [authorId], references: [id])
+    categoryId  String?
+    category    Category? @relation(fields: [categoryId], references: [id])
+    tags        PostTag[]
+    publishedAt DateTime?
+    createdAt   DateTime  @default(now())
+    updatedAt   DateTime  @updatedAt
+
+    @@index([authorId])
+    @@index([categoryId])
+    @@index([status])
+}
+
+model PostTag {
+    postId String
+    tagId  String
+    post   Post   @relation(fields: [postId], references: [id], onDelete: Cascade)
+    tag    Tag    @relation(fields: [tagId], references: [id], onDelete: Cascade)
+
+    @@id([postId, tagId])
+}
+
+// =============================================================================
+// PRODUCTS (Test model for CRUD generator)
+// =============================================================================
+
+model Product {
+    id          String    @id @default(cuid())
+    name        String
+    slug        String    @unique
+    description String?
+    price       Float     @default(0)
+    stock       Int       @default(0)
+    isActive    Boolean   @default(true)
+    categoryId  String?
+    category    Category? @relation(fields: [categoryId], references: [id])
+    createdAt   DateTime  @default(now())
+    updatedAt   DateTime  @updatedAt
+
+    @@index([categoryId])
+    @@index([slug])
+}

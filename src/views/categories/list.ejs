@@ -1,0 +1,38 @@
+<%- include('../layouts/main', { body: ` <div class="page-header">
+    <h2>Categories</h2>
+    <a href="/categories/create" class="btn btn-primary">Add Category</a>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            ${categories.length > 0 ? `
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Slug</th>
+                        <th>Posts</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${categories.map(c => `
+                    <tr>
+                        <td><strong>${c.name}</strong></td>
+                        <td><code>${c.slug}</code></td>
+                        <td>${c._count.posts}</td>
+                        <td class="actions">
+                            <a href="/categories/${c.id}/edit" class="btn btn-sm btn-outline">Edit</a>
+                            <form action="/categories/${c.id}/delete" method="POST" class="inline"
+                                onsubmit="return confirm('Delete?')">
+                                <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                    `).join('')}
+                </tbody>
+            </table>
+            ` : '<p class="text-muted">No categories found.</p>'}
+        </div>
+    </div>
+    ` }) %>

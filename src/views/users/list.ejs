@@ -1,0 +1,43 @@
+<%- include('../layouts/main', { body: ` <div class="page-header">
+    <h2>Users</h2>
+    <a href="/users/create" class="btn btn-primary">Add User</a>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            ${users.length > 0 ? `
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Role</th>
+                        <th>Status</th>
+                        <th>Posts</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${users.map(u => `
+                    <tr>
+                        <td>${u.name}</td>
+                        <td>${u.email}</td>
+                        <td><span class="badge">${u.role.name}</span></td>
+                        <td><span class="badge badge-${u.isActive ? 'success' : 'error'}">${u.isActive ? 'Active' :
+                                'Inactive'}</span></td>
+                        <td>${u._count.posts}</td>
+                        <td class="actions">
+                            <a href="/users/${u.id}/edit" class="btn btn-sm btn-outline">Edit</a>
+                            <form action="/users/${u.id}/delete" method="POST" class="inline"
+                                onsubmit="return confirm('Delete this user?')">
+                                <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                    `).join('')}
+                </tbody>
+            </table>
+            ` : '<p class="text-muted">No users found.</p>'}
+        </div>
+    </div>
+    ` }) %>

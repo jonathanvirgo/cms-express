@@ -1,0 +1,40 @@
+<%- include('../layouts/main', { body: `
+<div class="page-header">
+    <h2>Products</h2>
+    <a href="/products/create" class="btn btn-primary">Add Product</a>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        ${products.length > 0 ? `
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Slug</th>
+                    <th>Description</th>
+                    <th>Price</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                ${products.map(item => `
+                <tr>
+                    <td>${item.name || '-'}</td>
+                    <td>${item.slug || '-'}</td>
+                    <td>${item.description || '-'}</td>
+                    <td>${item.price?.toFixed(2) || '0.00'}</td>
+                    <td class="actions">
+                        <a href="/products/${item.id}/edit" class="btn btn-sm btn-outline">Edit</a>
+                        <form action="/products/${item.id}/delete" method="POST" class="inline" onsubmit="return confirm('Delete?')">
+                            <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+                `).join('')}
+            </tbody>
+        </table>
+        ` : '<p class="text-muted">No products found.</p>'}
+    </div>
+</div>
+` }) %>

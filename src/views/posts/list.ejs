@@ -1,0 +1,40 @@
+<%- include('../layouts/main', { body: ` <div class="page-header">
+    <h2>Posts</h2>
+    <a href="/posts/create" class="btn btn-primary">New Post</a>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            ${posts.length > 0 ? `
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Author</th>
+                        <th>Category</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${posts.map(p => `
+                    <tr>
+                        <td><strong>${p.title}</strong></td>
+                        <td>${p.author?.name || '-'}</td>
+                        <td>${p.category?.name || '-'}</td>
+                        <td><span class="badge badge-${p.status}">${p.status}</span></td>
+                        <td class="actions">
+                            <a href="/posts/${p.id}/edit" class="btn btn-sm btn-outline">Edit</a>
+                            <form action="/posts/${p.id}/delete" method="POST" class="inline"
+                                onsubmit="return confirm('Delete?')">
+                                <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                    `).join('')}
+                </tbody>
+            </table>
+            ` : '<p class="text-muted">No posts yet.</p>'}
+        </div>
+    </div>
+    ` }) %>
